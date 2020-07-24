@@ -8,7 +8,7 @@
 
 (defn- maybe-disable [state n]
   (if (< (:calls state) n)
-    (update-in state [:calls] inc)
+    (update state :calls inc)
     (assoc state :done true)))
 
 (defn- data-tracer [v state n old]
@@ -20,9 +20,9 @@
       (if (:done @state)
         (do (untrace v)
             (apply old args))
-        (do (swap! state update-in [:args] conj args)
+        (do (swap! state update :args conj args)
             (let [ret (apply old args)]
-              (swap! state update-in [:returns] conj ret)
+              (swap! state update :returns conj ret)
               ret))))
     {:trace/untraced old}))
 
